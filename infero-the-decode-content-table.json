@@ -1,0 +1,565 @@
+{
+  "series": {
+    "name": "Inferō: The Decode",
+    "short_name": "Inferō",
+    "tagline": "LLM inference, fully decoded.",
+    "description": "A 53-post deep-dive for ML engineers and researchers covering the full LLM inference stack — from KV caches and speculative decoding, to RLVR and test-time compute, to TPUs and wafer-scale silicon, to attention variants, multimodal inference, diffusion models, and agentic workloads.",
+    "etymology": "From Latin 'inferre' — to carry in, bring forth, draw a conclusion.",
+    "platforms": ["GitHub", "Substack"],
+    "last_updated": "2026-03",
+    "total_posts": 53
+  },
+  "naming": {
+    "full_title": "Inferō: The Decode",
+    "short_form": "Inferō",
+    "post_slug_format": "infero/{chapter}.{post}-{kebab-case-title}",
+    "post_byline_format": "Inferō: The Decode — Ch. {N} · Post {N.N}",
+    "social_tagline": "LLM inference, fully decoded.",
+    "chapter_callout_format": "Part of *{chapter_title}* — Ch. {N} of Inferō: The Decode"
+  },
+  "reference_blogs": [
+    {
+      "name": "The Illustrated Series",
+      "author": "Jay Alammar",
+      "url": "https://jalammar.github.io",
+      "lesson": "Gold standard for visual technical explainers"
+    },
+    {
+      "name": "sebastianraschka.com/blog",
+      "author": "Sebastian Raschka",
+      "url": "https://sebastianraschka.com/blog",
+      "lesson": "Closest comp — deep LLM architecture posts for ML engineers"
+    },
+    {
+      "name": "Lil'Log",
+      "author": "Lilian Weng",
+      "url": "https://lilianweng.github.io",
+      "lesson": "Dense, rigorous long-form with beautiful structure"
+    },
+    {
+      "name": "Karpathy Blog",
+      "author": "Andrej Karpathy",
+      "url": "https://karpathy.bearblog.dev/blog",
+      "lesson": "Punchy, opinionated — tells you what actually matters"
+    },
+    {
+      "name": "LMSYS Blog",
+      "author": "LMSYS / vLLM team",
+      "url": "https://lmsys.org/blog",
+      "lesson": "Primary source for serving systems research"
+    },
+    {
+      "name": "Databricks LLM Inference",
+      "author": "MosaicML/Databricks",
+      "url": "https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices",
+      "lesson": "Template for production inference best-practices posts"
+    }
+  ],
+  "chapters": [
+    {
+      "id": 1,
+      "title": "The Machine Room",
+      "subtitle": "Production Inference: building systems that serve at scale",
+      "theme": "Speed, cost, and throughput at serving time. Every technique fights the memory bandwidth wall from a different angle.",
+      "post_count": 12,
+      "posts": [
+        {
+          "id": "1.1",
+          "title": "Anatomy of Inference",
+          "description": "Prefill vs. decode, the memory wall, KV cache basics, key metrics: TTFT, TBT, throughput, goodput.",
+          "key_papers": [
+            "Vaswani et al., Attention Is All You Need (NeurIPS 2017)",
+            "Kaplan et al., Scaling Laws for Neural Language Models (OpenAI 2020)"
+          ],
+          "tags": ["fundamentals", "kv-cache", "metrics"]
+        },
+        {
+          "id": "1.2",
+          "title": "KV Cache Optimization",
+          "description": "PagedAttention, prefix caching, KV quantization, eviction strategies, distributed KV (LMCache), prompt compression (LLMLingua).",
+          "key_papers": [
+            "★ Kwon et al., PagedAttention (SOSP 2023)",
+            "Jiang et al., LLMLingua (EMNLP 2023)"
+          ],
+          "tags": ["kv-cache", "memory", "serving"]
+        },
+        {
+          "id": "1.3",
+          "title": "Attention Head Variants",
+          "description": "MHA → MQA → GQA → MLA. GQA is the production standard; MLA is DeepSeek's KV compression breakthrough.",
+          "note": "Moved from Ch. 4 — mainstream production technique.",
+          "key_papers": [
+            "★ Shazeer, Fast Transformer Decoding: MQA (2019)",
+            "★ Ainslie et al., GQA (EMNLP 2023)",
+            "DeepSeek-AI, DeepSeek-V2 Technical Report (2024)"
+          ],
+          "tags": ["attention", "kv-cache", "architecture"]
+        },
+        {
+          "id": "1.4",
+          "title": "Sliding Window Attention & Attention Sinks",
+          "description": "SWA for bounded KV cache; attention sink problem; StreamingLLM fix; production in Mistral 7B, TensorRT-LLM, OpenAI models.",
+          "note": "Moved from Ch. 4 — shipped in production.",
+          "key_papers": [
+            "★ Jiang et al., Mistral 7B (2023)",
+            "★ Xiao et al., Efficient Streaming LLMs with Attention Sinks (ICLR 2024)"
+          ],
+          "tags": ["attention", "long-context", "serving"]
+        },
+        {
+          "id": "1.5",
+          "title": "Long Context: RoPE Scaling & Position Interpolation",
+          "description": "Extending context windows to 128K–1M tokens without full retraining. YaRN, NTK-aware RoPE, LongRoPE.",
+          "key_papers": [
+            "Chen et al., Extending Context Window via Positional Interpolation (2023)",
+            "Peng et al., YaRN: Efficient Context Window Extension (ICLR 2024)"
+          ],
+          "tags": ["long-context", "position-encoding", "architecture"]
+        },
+        {
+          "id": "1.6",
+          "title": "Batching Strategies",
+          "description": "Static, dynamic, continuous batching (Orca). Chunked prefill to reduce TTFT spikes. 10-50x throughput gains.",
+          "key_papers": [
+            "★ Yu et al., Orca (OSDI 2022)",
+            "Agrawal et al., Sarathi-Serve: Chunked Prefill (OSDI 2024)"
+          ],
+          "tags": ["serving", "scheduling", "throughput"]
+        },
+        {
+          "id": "1.7",
+          "title": "Speculative Decoding & Multi-Token Prediction",
+          "description": "Draft-verify (lossless 1.5–3x speedup). Medusa, EAGLE. Multi-Token Prediction training technique (DeepSeek-V3, Meta FAIR).",
+          "key_papers": [
+            "★ Leviathan et al., Speculative Decoding (ICML 2023)",
+            "Cai et al., Medusa (2024)",
+            "Li et al., EAGLE (2024)",
+            "★ Gloeckle et al., Better & Faster LLMs via MTP (Meta FAIR 2024)"
+          ],
+          "tags": ["decoding", "latency", "throughput"]
+        },
+        {
+          "id": "1.8",
+          "title": "Quantization",
+          "description": "FP16→INT4→FP8 precision ladder. GPTQ, AWQ, LLM.int8(), SmoothQuant. FP8 in H100 and DeepSeek-V3.",
+          "key_papers": [
+            "★ Dettmers et al., LLM.int8() (NeurIPS 2022)",
+            "Frantar et al., GPTQ (ICLR 2023)",
+            "Lin et al., AWQ (MLSys 2024)",
+            "Xiao et al., SmoothQuant (ICML 2023)"
+          ],
+          "tags": ["quantization", "compression", "memory"]
+        },
+        {
+          "id": "1.9",
+          "title": "Model Parallelism & Disaggregated Inference",
+          "description": "TP, PP, SP, EP. PD disaggregation: physically separate prefill (H100s) from decode (different chips). DistServe, llm-d, AWS+Cerebras.",
+          "key_papers": [
+            "★ Shoeybi et al., Megatron-LM (2019/2021)",
+            "★ Zhong et al., DistServe: Disaggregating Prefill and Decoding (OSDI 2024)"
+          ],
+          "tags": ["parallelism", "serving", "disaggregation"]
+        },
+        {
+          "id": "1.10",
+          "title": "FlashAttention & Kernel Optimizations",
+          "description": "IO-aware tiling eliminates HBM round-trips. FA1/2/3 progression. FlashInfer. Kernel fusion.",
+          "key_papers": [
+            "★ Dao et al., FlashAttention (NeurIPS 2022)",
+            "Dao, FlashAttention-2 (ICLR 2024)",
+            "Shah et al., FlashAttention-3 (NeurIPS 2024)"
+          ],
+          "tags": ["attention", "kernels", "hardware"]
+        },
+        {
+          "id": "1.11",
+          "title": "Pruning, Distillation, MoE & Model Routing",
+          "description": "Structured pruning (Minitron). Knowledge distillation. MoE (Mixtral, DeepSeek-V3, Llama 4). Model routing/cascades (RouteLLM, FrugalGPT).",
+          "key_papers": [
+            "★ Jiang et al., Mixtral of Experts (2024)",
+            "Muralidharan et al., Compact LLMs via Pruning and Distillation / Minitron (NeurIPS 2024)"
+          ],
+          "tags": ["compression", "moe", "routing"]
+        },
+        {
+          "id": "1.12",
+          "title": "Serving Frameworks",
+          "description": "vLLM, TensorRT-LLM, SGLang, TGI — comparison on latency, throughput, hardware compatibility.",
+          "key_papers": [
+            "★ vLLM / Kwon et al. (SOSP 2023)",
+            "SGLang / Zheng et al. (MLSys 2024)"
+          ],
+          "tags": ["serving", "frameworks", "production"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "The Thinking Layer",
+      "subtitle": "RL Inference: making models reason harder, not just faster",
+      "theme": "Test-time compute as a new axis of model capability — from simple sampling to pure RL-trained reasoning.",
+      "post_count": 10,
+      "posts": [
+        {
+          "id": "2.1",
+          "title": "Test-Time Compute Scaling",
+          "description": "The paradigm shift from train bigger to think longer. Inference-time compute vs. pre-training compute tradeoff.",
+          "key_papers": [
+            "★ Snell et al., Scaling LLM Test-Time Compute Optimally (ICLR 2025 Oral)",
+            "Wu et al., Inference Scaling Laws (ICLR 2025)"
+          ],
+          "tags": ["test-time-compute", "scaling", "reasoning"]
+        },
+        {
+          "id": "2.2",
+          "title": "Chain-of-Thought and Its Variants",
+          "description": "Zero-shot CoT, few-shot CoT, self-consistency, Tree of Thoughts, tool-augmented reasoning.",
+          "key_papers": [
+            "★ Wei et al., Chain-of-Thought Prompting (NeurIPS 2022)",
+            "Wang et al., Self-Consistency (ICLR 2023)",
+            "Yao et al., Tree of Thoughts (NeurIPS 2023)"
+          ],
+          "tags": ["chain-of-thought", "reasoning", "prompting"]
+        },
+        {
+          "id": "2.3",
+          "title": "Reward Models & Verifiers",
+          "description": "ORM vs PRM. RLVR (verifiable rewards). LLM-as-judge at inference time. Reward hacking.",
+          "key_papers": [
+            "★ Lightman et al., Let's Verify Step by Step (ICLR 2024)",
+            "Cobbe et al., Training Verifiers to Solve Math Word Problems (2021)",
+            "Wang et al., Math-Shepherd (ACL 2024)"
+          ],
+          "tags": ["reward-models", "prm", "rlvr"]
+        },
+        {
+          "id": "2.4",
+          "title": "Best-of-N, Voting & Adaptive Compute",
+          "description": "BoN, majority voting, weighted voting, Certaindex adaptive allocation (Dynasor).",
+          "key_papers": [
+            "★ Wu et al., Inference Scaling Laws (ICLR 2025)",
+            "Fu et al., Dynasor: Certaindex (2024)"
+          ],
+          "tags": ["sampling", "test-time-compute", "efficiency"]
+        },
+        {
+          "id": "2.5",
+          "title": "Tree Search at Inference Time",
+          "description": "MCTS applied to LLM reasoning. REBASE. When tree search beats sampling.",
+          "key_papers": [
+            "Silver et al., Mastering Go with Deep Neural Networks and Tree Search (Nature 2016)",
+            "★ Wu et al., Inference Scaling Laws — REBASE (ICLR 2025)"
+          ],
+          "tags": ["mcts", "search", "test-time-compute"]
+        },
+        {
+          "id": "2.6",
+          "title": "RLHF & PPO",
+          "description": "The SFT → reward model → PPO pipeline. DPO. The bridge from preference learning to reasoning.",
+          "key_papers": [
+            "★ Ouyang et al., InstructGPT (NeurIPS 2022)",
+            "Schulman et al., Proximal Policy Optimization (2017)",
+            "Rafailov et al., Direct Preference Optimization (NeurIPS 2023)"
+          ],
+          "tags": ["rlhf", "ppo", "alignment"]
+        },
+        {
+          "id": "2.7",
+          "title": "GRPO & RLVR: How DeepSeek-R1 Changed Everything",
+          "description": "RLVR bypasses reward model. GRPO eliminates value model. R1-Zero: AIME 2024 from 15.6% → 71.0%. The aha moment.",
+          "key_papers": [
+            "★ DeepSeek-AI, DeepSeek-R1 (Nature 2025)",
+            "Shao et al., DeepSeekMath / GRPO (2024)"
+          ],
+          "tags": ["grpo", "rlvr", "reasoning", "deepseek"]
+        },
+        {
+          "id": "2.8",
+          "title": "Token Efficiency & Overthinking",
+          "description": "Budget forcing, reasoning depth calibration, REO, fast mode inference.",
+          "key_papers": [
+            "Pfau et al., Let's Think Dot by Dot (COLM 2024)"
+          ],
+          "tags": ["efficiency", "reasoning", "token-budget"]
+        },
+        {
+          "id": "2.9",
+          "title": "Distilling Reasoning Into Smaller Models",
+          "description": "SFT on CoT traces. DeepSeek-R1 distillation: 1.5B model outperforms GPT-4o on math.",
+          "key_papers": [
+            "★ DeepSeek-AI, DeepSeek-R1 distillation section (2025)",
+            "Ho et al., LLMs as Reasoning Teachers (ACL 2023)"
+          ],
+          "tags": ["distillation", "reasoning", "small-models"]
+        },
+        {
+          "id": "2.10",
+          "title": "The Unified View",
+          "description": "Serving reasoning models. KV management at 100K+ token chains. TTRL. Future: online RL inference.",
+          "tags": ["synthesis", "serving", "future"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "The Foundry",
+      "subtitle": "AI Accelerators: the silicon that shapes everything above",
+      "theme": "The hardware substrate that determines which inference optimizations are even possible.",
+      "post_count": 8,
+      "posts": [
+        {
+          "id": "3.1",
+          "title": "Why GPUs Dominate (and Their Limits)",
+          "description": "CUDA lock-in, memory bandwidth bottleneck, NVIDIA roadmap, AMD MI300X, Intel Gaudi 3, NVLink / InfiniBand.",
+          "tags": ["gpu", "nvidia", "hardware", "bandwidth"]
+        },
+        {
+          "id": "3.2",
+          "title": "Google TPUs",
+          "description": "Systolic arrays, v7 Ironwood (4,614 TFLOPS/chip), optical circuit switches, JAX/XLA tradeoffs.",
+          "key_papers": [
+            "Jouppi et al., In-Datacenter Performance Analysis of a TPU (ISCA 2017)"
+          ],
+          "tags": ["tpu", "google", "hardware"]
+        },
+        {
+          "id": "3.3",
+          "title": "AWS Trainium & Inferentia",
+          "description": "Trainium2 (2.52 PFLOPS FP8/chip). 500K+ chip Anthropic deployment. AWS+Cerebras disaggregated architecture.",
+          "tags": ["aws", "trainium", "inferentia", "cloud"]
+        },
+        {
+          "id": "3.4",
+          "title": "Groq LPU",
+          "description": "Compiled SRAM, 80 TB/s bandwidth, 1,665 tok/s with speculative decoding, deterministic execution.",
+          "tags": ["groq", "lpu", "inference-chip", "latency"]
+        },
+        {
+          "id": "3.5",
+          "title": "Cerebras WSE",
+          "description": "4T transistors, 900K cores, wafer-scale eliminates inter-chip comms, 125 PFLOPS peak.",
+          "tags": ["cerebras", "wafer-scale", "hardware"]
+        },
+        {
+          "id": "3.6",
+          "title": "Tenstorrent & Open-Source Silicon",
+          "description": "RISC-V + Tensix cores, Blackhole (745 TFLOPS FP8, $999), IP licensing, open tt-Metalium toolchain.",
+          "tags": ["tenstorrent", "risc-v", "open-source", "hardware"]
+        },
+        {
+          "id": "3.7",
+          "title": "Edge AI Accelerators",
+          "description": "Apple ANE (18 TOPS), Qualcomm Hexagon NPU, Hailo-8/10H, on-device LLM requirements.",
+          "tags": ["edge", "mobile", "npu", "on-device"]
+        },
+        {
+          "id": "3.8",
+          "title": "Photonics, Neuromorphic & Next-Gen Architectures",
+          "description": "Lightmatter (photonic), D-Matrix (in-memory compute), Intel Loihi (neuromorphic), optical interconnects in TPU pods.",
+          "tags": ["photonics", "neuromorphic", "future", "hardware"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "The Attention Wars",
+      "subtitle": "Attention Variants: the mechanism is no longer settled",
+      "theme": "As of 2026, every major lab has made a different bet on attention architecture.",
+      "post_count": 4,
+      "posts": [
+        {
+          "id": "4.1",
+          "title": "The Quadratic Problem & the Design Space",
+          "description": "Why softmax attention can't scale infinitely. The full spectrum: Softmax → Sparse → Linear → SSM → Hybrid. Where each frontier model sits.",
+          "tags": ["attention", "architecture", "overview"]
+        },
+        {
+          "id": "4.2",
+          "title": "Linear Attention & Gated DeltaNet",
+          "description": "Katharopoulos 2020 → RetNet → GLA → DeltaNet → Gated DeltaNet (ICLR 2025). 3:1 hybrid in Qwen3.5 and Kimi Linear. MiniMax rollback — the honest counterpoint.",
+          "key_papers": [
+            "★ Katharopoulos et al., Transformers are RNNs (ICML 2020)",
+            "★ Yang et al., Gated Delta Networks: Improving Mamba2 with Delta Rule (ICLR 2025)"
+          ],
+          "tags": ["linear-attention", "gated-deltanet", "architecture"]
+        },
+        {
+          "id": "4.3",
+          "title": "Mamba & SSM Hybrids",
+          "description": "Selective state spaces, Mamba-2, 1:7 hybrid ratio. Jamba 1.5, Nemotron-H (3x throughput), Bamba-9B, FalconMamba in production.",
+          "key_papers": [
+            "★ Gu & Dao, Mamba: Linear-Time Sequence Modeling (2023)",
+            "Dao & Gu, Transformers are SSMs / Mamba-2 (ICML 2024)",
+            "★ Lieber et al., Jamba (ICLR 2025)"
+          ],
+          "tags": ["mamba", "ssm", "hybrid", "architecture"]
+        },
+        {
+          "id": "4.4",
+          "title": "Sparse Attention & The Honest Verdict",
+          "description": "DeepSeek Sparse Attention (DSA). GLM-5: MLA + DSA. The verdict matrix: what's production-ready vs. still a bet.",
+          "tags": ["sparse-attention", "verdict", "production"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Beyond the Word",
+      "subtitle": "Multimodal & Generative Inference: when models see, hear, and generate",
+      "theme": "What changes when models process images, video, and generated media — and the unique inference challenges each modality brings.",
+      "post_count": 11,
+      "posts": [
+        {
+          "id": "5.1",
+          "title": "How Multimodal LLMs Work",
+          "description": "Late fusion vs. early fusion. Token count problem: 336×336 = 576 tokens; 1080p tiled = 2,000–5,000 tokens.",
+          "tags": ["vlm", "architecture", "fundamentals"]
+        },
+        {
+          "id": "5.2",
+          "title": "The Visual Token Bottleneck",
+          "description": "Spatial/semantic redundancy. KV cache explosion. Inverse scaling: fewer tokens + larger LLM wins.",
+          "tags": ["vlm", "visual-tokens", "efficiency"]
+        },
+        {
+          "id": "5.3",
+          "title": "Visual Token Compression",
+          "description": "Q-Former, Resampler, TokenPacker. FastV (54% FLOP reduction), SparseVLM, ATP-LLaVA, Matryoshka Multimodal Models.",
+          "tags": ["vlm", "token-compression", "efficiency"]
+        },
+        {
+          "id": "5.4",
+          "title": "High-Resolution & Tiling",
+          "description": "Dynamic tiling (LLaVA-HD). Qwen2.5-VL Window-Attention ViT. VL-CACHE modality-aware KV eviction. MiniCPM-V on mobile.",
+          "tags": ["vlm", "high-resolution", "tiling"]
+        },
+        {
+          "id": "5.5",
+          "title": "Video Inference",
+          "description": "Temporal redundancy. LLaMA-VID (2 tokens/frame). PruneVid. STORM (NVIDIA) long video.",
+          "tags": ["video", "temporal", "efficiency"]
+        },
+        {
+          "id": "5.6",
+          "title": "Vision Encoders",
+          "description": "CLIP vs. SigLIP vs. DINOv2 vs. native tokenization (GPT-4o). Qwen2.5-VL Window-Attention ViT.",
+          "tags": ["vision-encoder", "clip", "siglip"]
+        },
+        {
+          "id": "5.7",
+          "title": "Multimodal KV Cache",
+          "description": "Modality asymmetry. VL-CACHE eviction. Shared prefix caching for repeated images. Inf-MLLM streaming.",
+          "tags": ["vlm", "kv-cache", "memory"]
+        },
+        {
+          "id": "5.8",
+          "title": "How Diffusion Models Work",
+          "description": "Denoising loop. Latent diffusion (VAE). CFG doubling cost. UNet → DiT backbone (SD3, FLUX, Sora).",
+          "key_papers": [
+            "Ho et al., DDPM (NeurIPS 2020)",
+            "Rombach et al., Latent Diffusion Models (CVPR 2022)",
+            "★ Peebles & Xie, DiT: Scalable Diffusion Models with Transformers (ICCV 2023)"
+          ],
+          "tags": ["diffusion", "image-generation", "fundamentals"]
+        },
+        {
+          "id": "5.9",
+          "title": "Accelerating Diffusion Inference",
+          "description": "DDIM (50x step reduction). DPM-Solver (10-20 steps). Consistency models (1-4 steps). SDXL-Turbo, FLUX.1-schnell.",
+          "key_papers": [
+            "★ Song et al., DDIM (ICLR 2021)",
+            "Lu et al., DPM-Solver (NeurIPS 2022)",
+            "★ Song et al., Consistency Models (ICML 2023)"
+          ],
+          "tags": ["diffusion", "sampling", "efficiency"]
+        },
+        {
+          "id": "5.10",
+          "title": "Video Diffusion & the Temporal Challenge",
+          "description": "Temporal attention for frame consistency. DiT at video scale (Sora). Efficient video generation techniques.",
+          "key_papers": [
+            "Ho et al., Video Diffusion Models (NeurIPS 2022)",
+            "OpenAI, Sora: Video generation models as world simulators (2024)"
+          ],
+          "tags": ["video-diffusion", "sora", "temporal"]
+        },
+        {
+          "id": "5.11",
+          "title": "Frontier Multimodal Architectures",
+          "description": "GPT-4o, Gemini 2.5 Pro, Llama 4, Qwen2.5-VL, InternVL2, DeepSeek-VL2. Unified tokenization vs. vision tower.",
+          "tags": ["vlm", "frontier-models", "architecture"]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "The Long Game",
+      "subtitle": "Agentic Inference: when a single query becomes a multi-hour task",
+      "theme": "Agentic inference breaks every single-turn assumption. It's about completing tasks that take hours, not serving responses in milliseconds.",
+      "post_count": 8,
+      "posts": [
+        {
+          "id": "6.1",
+          "title": "The Anatomy of an Agentic Workload",
+          "description": "The ReAct loop in production. SWE-bench: 50–200 LLM calls, 200K+ tokens per 2-hour trajectory. Task completion rate per dollar as the key metric.",
+          "tags": ["agentic", "fundamentals", "metrics"]
+        },
+        {
+          "id": "6.2",
+          "title": "The Context Explosion Problem",
+          "description": "Context grows across turns. Lost in the middle at 100K+ tokens. Truncation, summarization, RAG for agent memory, LLMLingua compression.",
+          "tags": ["agentic", "context", "memory"]
+        },
+        {
+          "id": "6.3",
+          "title": "KV Cache for Agents: Persistence, Reuse & TTL",
+          "description": "KV cache spans hours across tool call idle time. Continuum KV TTL scheduling. KVFlow for multi-agent workflows. Isolation requirement.",
+          "key_papers": [
+            "Continuum: Efficient Multi-Turn LLM Agent Scheduling with KV Cache TTL (arXiv 2025)",
+            "Agentic Plan Caching (OpenReview 2025)",
+            "KVFlow for multi-agent workflows (NeurIPS 2025)"
+          ],
+          "tags": ["agentic", "kv-cache", "serving"]
+        },
+        {
+          "id": "6.4",
+          "title": "Tool Call Latency: The Bottleneck Nobody Optimizes",
+          "description": "Tool execution = 60–80% of wall-clock time. Parallel tool calls (4x speedup). Async execution. Critical path analysis.",
+          "tags": ["agentic", "tools", "latency"]
+        },
+        {
+          "id": "6.5",
+          "title": "Multi-Agent Orchestration",
+          "description": "When to spawn sub-agents. Critical execution path determines end-to-end latency. DAG orchestration. Agent routing. 8 small-model runs often beats 1 large-model run.",
+          "tags": ["multi-agent", "orchestration", "parallelism"]
+        },
+        {
+          "id": "6.6",
+          "title": "Agentic Memory",
+          "description": "In-context vs. external vs. parametric memory. EM-LLM episodic memory. MemOS: agent memory as OS with tiers.",
+          "key_papers": [
+            "MemOS: A Memory OS for AI Systems (arXiv 2025)",
+            "EM-LLM: Human-Inspired Episodic Memory for Infinite Context LLMs (ICLR 2025)"
+          ],
+          "tags": ["agentic", "memory", "long-horizon"]
+        },
+        {
+          "id": "6.7",
+          "title": "Cost Management at Scale",
+          "description": "200-step trajectory × $0.01/call × 1K users = $2K/day on one workflow. Certaindex adaptive allocation. Budget-constrained orchestration.",
+          "key_papers": [
+            "Fu et al., Dynasor: Certaindex for Adaptive Reasoning Compute (2024)",
+            "Damani et al., Learning How Hard to Think (2024)"
+          ],
+          "tags": ["agentic", "cost", "efficiency"]
+        },
+        {
+          "id": "6.8",
+          "title": "Serving Infrastructure for Agents",
+          "description": "Session-aware routing (87% cache hit rate with llm-d). State isolation. Fault tolerance for 2-hour trajectories. MCP protocol. Kubernetes + Argo at 8K parallel runs.",
+          "tags": ["agentic", "serving", "infrastructure", "mcp"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 120 120">
+  <rect x="0" y="0" width="120" height="120" rx="24" fill="#1a1a1a"/>
+  <text x="60" y="67" font-family="'JetBrains Mono', monospace" font-size="64" font-weight="700" text-anchor="middle" dominant-baseline="central">
+    <tspan fill="#ffffff">i</tspan><tspan fill="#008a44">ō</tspan>
+  </text>
+</svg>

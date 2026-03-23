@@ -9,8 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0c0c0c;--bg2:#111;--border:#222;--green:#00e676;--amber:#ffab00;--dim:#555;--text:#ccc;--heading:#fff;--serif:"IBM Plex Serif",Georgia,serif;--mono:"IBM Plex Mono",monospace}
-html.light{--bg:#f8f8f8;--bg2:#f0f0f0;--border:#ddd;--green:#008a44;--amber:#c47d00;--dim:#999;--text:#333;--heading:#111}
+:root{--bg:#0c0c0c;--bg2:#111;--border:#222;--green:#00e676;--amber:#ffab00;--dim:#555;--caption:#8a9bb0;--text:#ccc;--heading:#fff;--serif:"IBM Plex Serif",Georgia,serif;--mono:"IBM Plex Mono",monospace}
+html.light{--bg:#f8f8f8;--bg2:#f0f0f0;--border:#ddd;--green:#008a44;--amber:#c47d00;--dim:#999;--caption:#6b7c8f;--text:#333;--heading:#111}
 body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:17px;line-height:1.8;max-width:760px;margin:0 auto;padding:56px 28px 100px}
 button.toggle{position:fixed;top:20px;right:20px;background:none;border:1px solid var(--border);color:var(--dim);font-family:var(--mono);font-size:11px;padding:5px 10px;cursor:pointer;z-index:10}
 button.toggle:hover{color:var(--green);border-color:var(--green)}
@@ -23,7 +23,7 @@ em{font-style:italic}
 a{color:var(--green)}
 blockquote{border-left:3px solid var(--amber);padding:16px 24px;margin:32px 0;color:var(--text);font-family:var(--mono);font-size:15px;line-height:1.8;font-style:italic}
 img{border-radius:4px;border:1px solid var(--border);background:var(--bg2)}
-img+p>em:only-child{display:block;text-align:center;font-size:12px;color:var(--dim);font-family:var(--mono);margin-top:8px;margin-bottom:24px;font-style:normal;line-height:1.5}
+p:has(img)>em{display:block;text-align:center;font-size:13px;color:var(--caption);font-family:var(--mono);margin-top:8px;margin-bottom:24px;font-style:normal;line-height:1.5}
 code{font-family:var(--mono);font-size:13px;background:var(--bg2);padding:2px 6px;border-radius:3px;color:var(--amber)}
 pre{background:var(--bg2);border:1px solid var(--border);padding:20px;overflow-x:auto;margin:24px 0;border-radius:4px}
 pre code{background:none;padding:0;color:var(--text);font-size:13px}
@@ -37,7 +37,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <button class="toggle" id="t">light</button>
 <h1>One Architecture to Rule Them All</h1>
 <h3>Inferō: The Decode — Ch. 1 · Post 1.1</h3>
-<p><strong>by Chongming</strong></p>
+<p><strong>by <a href="https://github.com/chongming-ni">Chongming</a></strong> · <span style="color:var(--dim)">Mar 22, 2026</span></p>
 <hr />
 <p>Before we can talk about LLM inference techniques, we need to answer a more basic question: why does the modern LLM look the way it does? Every optimization we'll cover in this chapter is fighting the same underlying physics. To understand why the solutions are shaped the way they are, you first need to understand the problem — and that means going back to the architectural decisions that brought us here.</p>
 <p>By the end of this post, you'll understand why the transformer beat out its predecessors, why decoder-only became the dominant design, why next-token prediction turns out to be a surprisingly powerful training objective, and what the scaling laws tell us about where things are headed. These are the foundations that made modern LLM inference both necessary and genuinely hard.</p>
@@ -149,6 +149,24 @@ L(C) &\propto C^{-\gamma}
 <li>Sutskever, NeurIPS 2024 talk — "Pre-training as we know it will unquestionably end"</li>
 <li>Sutton, "The Bitter Lesson" (2019) — <a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">incompleteideas.net/IncIdeas/BitterLesson.html</a></li>
 </ol>
+<div style="margin-top:64px;padding-top:32px;border-top:1px solid var(--border)">
+  <script src="https://giscus.app/client.js"
+          data-repo="chongming-ni/infero"
+          data-repo-id="R_kgDORqFNAA"
+          data-category="General"
+          data-category-id="DIC_kwDORqFNAM4C5G1K"
+          data-mapping="url"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+<script data-goatcounter="https://infero.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
 const b=document.getElementById("t"),h=document.documentElement;
 if(localStorage.getItem("theme")==="light"){h.classList.add("light");b.textContent="dark";}

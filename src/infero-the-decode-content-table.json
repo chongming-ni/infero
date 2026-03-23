@@ -17,44 +17,6 @@
     "social_tagline": "LLM inference, fully decoded.",
     "chapter_callout_format": "Part of *{chapter_title}* — Ch. {N} of Inferō: The Decode"
   },
-  "reference_blogs": [
-    {
-      "name": "The Illustrated Series",
-      "author": "Jay Alammar",
-      "url": "https://jalammar.github.io",
-      "lesson": "Gold standard for visual technical explainers"
-    },
-    {
-      "name": "sebastianraschka.com/blog",
-      "author": "Sebastian Raschka",
-      "url": "https://sebastianraschka.com/blog",
-      "lesson": "Closest comp — deep LLM architecture posts for ML engineers"
-    },
-    {
-      "name": "Lil'Log",
-      "author": "Lilian Weng",
-      "url": "https://lilianweng.github.io",
-      "lesson": "Dense, rigorous long-form with beautiful structure"
-    },
-    {
-      "name": "Karpathy Blog",
-      "author": "Andrej Karpathy",
-      "url": "https://karpathy.bearblog.dev/blog",
-      "lesson": "Punchy, opinionated — tells you what actually matters"
-    },
-    {
-      "name": "LMSYS Blog",
-      "author": "LMSYS / vLLM team",
-      "url": "https://lmsys.org/blog",
-      "lesson": "Primary source for serving systems research"
-    },
-    {
-      "name": "Databricks LLM Inference",
-      "author": "MosaicML/Databricks",
-      "url": "https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices",
-      "lesson": "Template for production inference best-practices posts"
-    }
-  ],
   "chapters": [
     {
       "id": 1,

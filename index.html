@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inferō: The Decode</title>
-  <meta name="description" content="LLM inference, fully decoded. 53 posts across 6 chapters." />
+  <meta name="description" content="LLM inference, fully decoded. Six chapters across the full stack." />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -108,11 +108,10 @@
       color: var(--text);
       margin-bottom: 32px;
       font-size: 13px;
-      line-height: 1.8;
-      font-style: italic;
+      line-height: 2;
     }
 
-    .lede strong { color: var(--heading); font-style: normal; font-weight: 500; }
+    .lede strong { color: var(--heading); font-weight: 500; }
 
     /* ── Links row ── */
     .links {
@@ -179,29 +178,22 @@
       color: #333333;
     }
 
-    /* ── Post index ── */
-    .post-block { margin-bottom: 24px; }
-
-    .post-ch-label {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--green);
-      margin-bottom: 8px;
-    }
-
-    .post-row {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--border);
+    /* ── Published posts (nested in chapter) ── */
+    .published-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      padding-left: 60px;
+      border-top: 1px solid var(--border);
       font-size: 12px;
     }
 
-    .post-row:last-child { border-bottom: none; }
-    .post-row:hover .post-name { color: var(--heading); }
+    .published-row:hover .pub-name { color: var(--heading); }
 
-    .post-id { color: var(--dim); }
-    .post-name { color: var(--text); }
+    .pub-id { color: var(--dim); flex-shrink: 0; }
+    .pub-name { color: var(--text); }
 
     /* ── Footer ── */
     .footer {
@@ -257,29 +249,13 @@
     <div class="tagline" style="margin-top: 6px;">by <a href="#">Chongming</a></div>
   </div>
 
-  <div class="stats">
-    <div>
-      <span class="stat-val">53</span>
-      <span class="stat-key">posts</span>
-    </div>
-    <div>
-      <span class="stat-val">6</span>
-      <span class="stat-key">chapters</span>
-    </div>
-    <div>
-      <span class="stat-val">80+</span>
-      <span class="stat-key">papers</span>
-    </div>
-  </div>
-
   <p class="lede">
-    Training a language model is the headline. <strong>Inference is the story.</strong> Every token, every millisecond, every dollar spent on GPU time — that's the inference stack at work. A 53-post deep-dive for ML engineers and researchers covering the full stack, from KV caches to silicon to agentic inference.
+    Training a language model is the headline. <strong>Inference is the story.</strong> Every token generated, every millisecond of latency, every dollar of GPU time — that's the inference stack at work. A series for ML engineers and researchers who want to understand it fully: from KV caches and speculative decoding, to silicon and accelerators, to reasoning loops and agentic systems.
   </p>
 
   <div class="links">
     <a href="https://github.com">github↗</a>
     <a href="https://substack.com">substack↗</a>
-    <a href="infero-the-decode-outline.md">outline.md↗</a>
   </div>
 
   <hr class="div" />
@@ -290,145 +266,62 @@
     <div class="ch-header">
       <span class="ch-num">ch. 01</span>
       <span class="ch-title">The Machine Room</span>
-      <span class="ch-count">12 posts</span>
     </div>
     <div class="ch-sub">Production inference: building systems that serve at scale</div>
-    <div class="ch-topics">kv-cache · batching · speculative decoding · quantization · flashattention · serving</div>
+
+    <div class="published-row">
+      <span class="pub-id">1.1</span>
+      <a class="pub-name" href="posts/1-1-one-architecture-to-rule-them-all/">One Architecture to Rule Them All</a>
+    </div>
   </div>
 
   <div class="chapter">
     <div class="ch-header">
       <span class="ch-num">ch. 02</span>
       <span class="ch-title">The Thinking Layer</span>
-      <span class="ch-count">10 posts</span>
     </div>
     <div class="ch-sub">RL inference: making models reason harder, not just faster</div>
-    <div class="ch-topics">test-time compute · chain-of-thought · rlvr · grpo · deepseek-r1 · distillation</div>
+
   </div>
 
   <div class="chapter">
     <div class="ch-header">
       <span class="ch-num">ch. 03</span>
       <span class="ch-title">The Foundry</span>
-      <span class="ch-count">8 posts</span>
     </div>
     <div class="ch-sub">AI accelerators: the silicon that shapes everything above</div>
-    <div class="ch-topics">gpu · tpu · groq · cerebras · tenstorrent · edge · photonics</div>
+
   </div>
 
   <div class="chapter">
     <div class="ch-header">
       <span class="ch-num">ch. 04</span>
       <span class="ch-title">The Attention Wars</span>
-      <span class="ch-count">4 posts</span>
     </div>
     <div class="ch-sub">Attention variants: the mechanism is no longer settled</div>
-    <div class="ch-topics">linear attention · mamba · ssm hybrids · sparse attention</div>
+
   </div>
 
   <div class="chapter">
     <div class="ch-header">
       <span class="ch-num">ch. 05</span>
       <span class="ch-title">Beyond the Word</span>
-      <span class="ch-count">11 posts</span>
     </div>
     <div class="ch-sub">Multimodal & generative inference: when models see, hear, and generate</div>
-    <div class="ch-topics">vlm · visual tokens · video inference · diffusion · dit · frontier vlms</div>
+
   </div>
 
   <div class="chapter">
     <div class="ch-header">
       <span class="ch-num">ch. 06</span>
       <span class="ch-title">The Long Game</span>
-      <span class="ch-count">8 posts</span>
     </div>
     <div class="ch-sub">Agentic inference: when a query becomes a multi-hour task</div>
-    <div class="ch-topics">context explosion · tool latency · multi-agent · agentic memory · mcp</div>
-  </div>
 
-  <hr class="div" />
-
-  <div class="sec">all posts</div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.01 — the machine room</div>
-    <div class="post-row"><span class="post-id">1.1</span><span class="post-name">Anatomy of Inference</span></div>
-    <div class="post-row"><span class="post-id">1.2</span><span class="post-name">KV Cache Optimization</span></div>
-    <div class="post-row"><span class="post-id">1.3</span><span class="post-name">Attention Head Variants (MHA → GQA → MLA)</span></div>
-    <div class="post-row"><span class="post-id">1.4</span><span class="post-name">Sliding Window Attention & Attention Sinks</span></div>
-    <div class="post-row"><span class="post-id">1.5</span><span class="post-name">Long Context: RoPE Scaling & Position Interpolation</span></div>
-    <div class="post-row"><span class="post-id">1.6</span><span class="post-name">Batching Strategies</span></div>
-    <div class="post-row"><span class="post-id">1.7</span><span class="post-name">Speculative Decoding & Multi-Token Prediction</span></div>
-    <div class="post-row"><span class="post-id">1.8</span><span class="post-name">Quantization</span></div>
-    <div class="post-row"><span class="post-id">1.9</span><span class="post-name">Model Parallelism & Disaggregated Inference</span></div>
-    <div class="post-row"><span class="post-id">1.10</span><span class="post-name">FlashAttention & Kernel Optimizations</span></div>
-    <div class="post-row"><span class="post-id">1.11</span><span class="post-name">Pruning, Distillation, MoE & Model Routing</span></div>
-    <div class="post-row"><span class="post-id">1.12</span><span class="post-name">Serving Frameworks</span></div>
-  </div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.02 — the thinking layer</div>
-    <div class="post-row"><span class="post-id">2.1</span><span class="post-name">Test-Time Compute Scaling</span></div>
-    <div class="post-row"><span class="post-id">2.2</span><span class="post-name">Chain-of-Thought and Its Variants</span></div>
-    <div class="post-row"><span class="post-id">2.3</span><span class="post-name">Reward Models & Verifiers</span></div>
-    <div class="post-row"><span class="post-id">2.4</span><span class="post-name">Best-of-N, Voting & Adaptive Compute</span></div>
-    <div class="post-row"><span class="post-id">2.5</span><span class="post-name">Tree Search at Inference Time</span></div>
-    <div class="post-row"><span class="post-id">2.6</span><span class="post-name">RLHF & PPO</span></div>
-    <div class="post-row"><span class="post-id">2.7</span><span class="post-name">GRPO & RLVR: How DeepSeek-R1 Changed Everything</span></div>
-    <div class="post-row"><span class="post-id">2.8</span><span class="post-name">Token Efficiency & Overthinking</span></div>
-    <div class="post-row"><span class="post-id">2.9</span><span class="post-name">Distilling Reasoning Into Smaller Models</span></div>
-    <div class="post-row"><span class="post-id">2.10</span><span class="post-name">The Unified View</span></div>
-  </div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.03 — the foundry</div>
-    <div class="post-row"><span class="post-id">3.1</span><span class="post-name">Why GPUs Dominate (and Their Limits)</span></div>
-    <div class="post-row"><span class="post-id">3.2</span><span class="post-name">Google TPUs</span></div>
-    <div class="post-row"><span class="post-id">3.3</span><span class="post-name">AWS Trainium & Inferentia</span></div>
-    <div class="post-row"><span class="post-id">3.4</span><span class="post-name">Groq LPU</span></div>
-    <div class="post-row"><span class="post-id">3.5</span><span class="post-name">Cerebras WSE</span></div>
-    <div class="post-row"><span class="post-id">3.6</span><span class="post-name">Tenstorrent & Open-Source Silicon</span></div>
-    <div class="post-row"><span class="post-id">3.7</span><span class="post-name">Edge AI Accelerators</span></div>
-    <div class="post-row"><span class="post-id">3.8</span><span class="post-name">Photonics, Neuromorphic & Next-Gen Architectures</span></div>
-  </div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.04 — the attention wars</div>
-    <div class="post-row"><span class="post-id">4.1</span><span class="post-name">The Quadratic Problem & the Design Space</span></div>
-    <div class="post-row"><span class="post-id">4.2</span><span class="post-name">Linear Attention & Gated DeltaNet</span></div>
-    <div class="post-row"><span class="post-id">4.3</span><span class="post-name">Mamba & SSM Hybrids</span></div>
-    <div class="post-row"><span class="post-id">4.4</span><span class="post-name">Sparse Attention & The Honest Verdict</span></div>
-  </div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.05 — beyond the word</div>
-    <div class="post-row"><span class="post-id">5.1</span><span class="post-name">How Multimodal LLMs Work</span></div>
-    <div class="post-row"><span class="post-id">5.2</span><span class="post-name">The Visual Token Bottleneck</span></div>
-    <div class="post-row"><span class="post-id">5.3</span><span class="post-name">Visual Token Compression</span></div>
-    <div class="post-row"><span class="post-id">5.4</span><span class="post-name">High-Resolution & Tiling</span></div>
-    <div class="post-row"><span class="post-id">5.5</span><span class="post-name">Video Inference</span></div>
-    <div class="post-row"><span class="post-id">5.6</span><span class="post-name">Vision Encoders</span></div>
-    <div class="post-row"><span class="post-id">5.7</span><span class="post-name">Multimodal KV Cache</span></div>
-    <div class="post-row"><span class="post-id">5.8</span><span class="post-name">How Diffusion Models Work</span></div>
-    <div class="post-row"><span class="post-id">5.9</span><span class="post-name">Accelerating Diffusion Inference</span></div>
-    <div class="post-row"><span class="post-id">5.10</span><span class="post-name">Video Diffusion & the Temporal Challenge</span></div>
-    <div class="post-row"><span class="post-id">5.11</span><span class="post-name">Frontier Multimodal Architectures</span></div>
-  </div>
-
-  <div class="post-block">
-    <div class="post-ch-label">ch.06 — the long game</div>
-    <div class="post-row"><span class="post-id">6.1</span><span class="post-name">The Anatomy of an Agentic Workload</span></div>
-    <div class="post-row"><span class="post-id">6.2</span><span class="post-name">The Context Explosion Problem</span></div>
-    <div class="post-row"><span class="post-id">6.3</span><span class="post-name">KV Cache for Agents: Persistence, Reuse & TTL</span></div>
-    <div class="post-row"><span class="post-id">6.4</span><span class="post-name">Tool Call Latency: The Bottleneck Nobody Optimizes</span></div>
-    <div class="post-row"><span class="post-id">6.5</span><span class="post-name">Multi-Agent Orchestration</span></div>
-    <div class="post-row"><span class="post-id">6.6</span><span class="post-name">Agentic Memory</span></div>
-    <div class="post-row"><span class="post-id">6.7</span><span class="post-name">Cost Management at Scale</span></div>
-    <div class="post-row"><span class="post-id">6.8</span><span class="post-name">Serving Infrastructure for Agents</span></div>
   </div>
 
   <div class="footer">
-    <span>inferō: the decode · chongming · vol. 1 · 2026</span>
+    <span>inferō: the decode · 2026</span>
     <span>
       <a href="https://github.com">github</a> ·
       <a href="https://substack.com">substack</a>

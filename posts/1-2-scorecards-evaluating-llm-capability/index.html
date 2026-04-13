@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scorecards: Evaluating LLM Capability</title>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0c0c0c;--bg2:#111;--border:#222;--green:#00e676;--amber:#ffab00;--dim:#555;--caption:#8a9bb0;--text:#ccc;--heading:#fff;--serif:"IBM Plex Serif",Georgia,serif;--mono:"IBM Plex Mono",monospace}
+html.light{--bg:#f8f8f8;--bg2:#f0f0f0;--border:#ddd;--green:#008a44;--amber:#c47d00;--dim:#999;--caption:#6b7c8f;--text:#333;--heading:#111}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:17px;line-height:1.8;max-width:760px;margin:0 auto;padding:56px 28px 100px}
+button.toggle{position:fixed;top:20px;right:20px;background:none;border:1px solid var(--border);color:var(--dim);font-family:var(--mono);font-size:11px;padding:5px 10px;cursor:pointer;z-index:10}
+button.toggle:hover{color:var(--green);border-color:var(--green)}
+h1{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--heading);line-height:1.3;margin-bottom:6px}
+h2{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin:48px 0 20px;border-bottom:1px solid var(--border);padding-bottom:8px}
+h3{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--amber);margin:32px 0 12px}
+p{margin-bottom:20px}
+strong{color:var(--heading);font-weight:600}
+em{font-style:italic}
+a{color:var(--green)}
+blockquote{border-left:3px solid var(--amber);padding:16px 24px;margin:32px 0;color:var(--text);font-family:var(--mono);font-size:15px;line-height:1.8;font-style:italic}
+img{max-width:100%;border-radius:4px;border:1px solid var(--border);background:var(--bg2);display:block;margin:0 auto}
+p:has(img)>em{display:block;text-align:center;font-size:13px;color:var(--caption);font-family:var(--mono);margin-top:8px;margin-bottom:24px;font-style:normal;line-height:1.5}
+code{font-family:var(--mono);font-size:13px;background:var(--bg2);padding:2px 6px;border-radius:3px;color:var(--amber)}
+pre{background:var(--bg2);border:1px solid var(--border);padding:20px;overflow-x:auto;margin:24px 0;border-radius:4px}
+pre code{background:none;padding:0;color:var(--text);font-size:13px}
+ul,ol{margin:0 0 20px 24px}
+li{margin-bottom:6px}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-family:var(--mono);font-size:13px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border)}
+th{color:var(--dim);font-weight:500;letter-spacing:.06em;font-size:12px}
+tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<button class="toggle" id="t">light</button>
+<h1>Scorecards: Evaluating LLM Capability</h1>
+<h3>Inferō: The Decode — Ch. 1 · Post 1.2</h3>
+<p><strong>by <a href="https://github.com/chongming-ni">Chongming Ni</a></strong> · <span style="color:var(--dim)">Apr 12, 2026</span></p>
+<hr />
+<p><a href="https://chongming-ni.github.io/infero/posts/1-1-one-architecture-to-rule-them-all/">Post 1.1</a> answered why the modern LLM looks the way it does — the transformer, decoder-only design, next-token prediction, the scaling laws that govern where things go from here. Now a more immediate question: once you have one of these models, how do you know if it's actually good?</p>
+<p>It's harder to answer than it sounds. By the end of this post, you'll understand how the benchmark ecosystem evolved and why it's in a permanent arms race, what the major labs are actually measuring when they publish model cards, and how to correctly read public leaderboards.</p>
+<hr />
+<h2>Part 1 — The Benchmark Treadmill</h2>
+<p>Here's a pattern worth knowing before you trust any number on a model card: every benchmark that becomes widely used eventually dies. Not because it was wrong, but because models get so good at it that it stops being able to tell you which model is better. The field then reaches for something harder. And the cycle repeats.</p>
+<p><strong>Before the GPT era</strong></p>
+<p>Before large language models, NLP research was task-specific and pipeline-driven. Models were evaluated on narrow, well-defined tasks: machine translation (BLEU score on WMT datasets), text summarization (ROUGE on CNN/DailyMail), and sentiment classification. Each task had its own dataset, its own metric, and its own leaderboard. The idea of evaluating a single model across all of them simultaneously didn't exist, because no model did all of them. It was not common to measure the general intelligence of a model — because no model was generally intelligent.</p>
+<p>GPT-3 (2020) changed this. With 175B parameters and few-shot prompting, it could perform dozens of tasks without any task-specific training. A model that could write poetry, answer medical questions, and translate between languages in the same forward pass now needed a fundamentally different kind of test — one that could measure general capability rather than performance on a single narrow task.</p>
+<p><strong>The knowledge era</strong></p>
+<p>The field reaches for academic exams as proxies for general intelligence. MMLU (Hendrycks et al., 2021a) — Massive Multitask Language Understanding, 57 subjects and ~16,000 multiple-choice questions spanning history, science, law, medicine, and math — becomes the standard. The logic is straightforward: if a model passes college-level exams across every discipline, it must be generally capable.</p>
+<p>For a few years, this worked. GPT-3 zero-shot scored ~43%. GPT-4 hit ~86%. And then by 2024, every frontier model was above ~90%, clustered so tightly that the benchmark could no longer discriminate between them. MMLU was effectively saturated.</p>
+<p><img src="images/fig1-mmlu-saturation.png" alt="MMLU scores over time, showing the S-curve flattening toward ~90%+ by 2023–2024." />
+<em>Figure 1. MMLU saturation over time — scores for open and proprietary models from 2023 to 2026. Source: <a href="https://llm-stats.com/benchmarks/mmlu">llm-stats.com</a>.</em></p>
+<p><strong>The reasoning era</strong></p>
+<p>Something shifts when instruction-tuned models arrive. These models don't just recall facts — they follow instructions and work through problems. This is the era when Chain-of-Thought (CoT) prompting (Wei et al., 2022) is shown to dramatically improve performance on multi-step problems. The key insight is quite simple: if you ask a model to show its reasoning before giving a final answer, it does significantly better on questions that require multiple intermediate steps.</p>
+<p>A classic example from the original paper illustrates why. Without CoT, models would frequently answer the question: "The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?" with 27 — an incorrect shortcut that skips a step. With CoT prompting — explicitly walking through "23 − 20 = 3, then 3 + 6 = 9" — models arrived at the correct answer of 9. The intermediate steps weren't decoration; they scaffolded the model's reasoning process.</p>
+<p>The distinction from the knowledge era matters. MMLU tests what a model <em>knows</em>. Reasoning benchmarks test whether a model can <em>derive</em> the right answer through a chain of steps, even for problems it has never encountered. The field shifts toward GSM8K (Cobbe et al., 2021), a dataset of 8,500 grade-school math word problems each requiring 2–8 reasoning steps, and ARC-Challenge (Clark et al., 2018), grade school science questions resistant to surface pattern-matching. These saturate even faster than MMLU — GPT-4 clears ~95% on GSM8K.</p>
+<p>Coding earns a special callout. HumanEval (Chen et al., 2021) — 164 handwritten Python function completions evaluated by unit test pass rate — becomes the coding proxy. By 2023, code generation had stopped being a niche research capability. GitHub Copilot had gone GA in June 2022; Cursor launched in 2023; Claude Code followed as a research preview in February 2025. The entire developer tooling ecosystem was reorganizing around LLM-powered coding frameworks, making coding benchmarks commercially urgent in a way that abstract academic benchmarks were not.</p>
+<p><strong>The frontier and agentic era</strong></p>
+<p>Two shifts happen in quick succession. Together, they define where capability evaluation stands today.</p>
+<p>First, difficulty escalates to PhD level. MMLU-Pro (Wang et al., 2024), a harder version with 10-option questions across ~12,000 problems, becomes the live replacement for MMLU. Beyond that, GPQA Diamond (Rein et al., 2023), 198 questions in biology, chemistry, and physics, becomes the default reasoning signal. The benchmark is deliberately "Google-proof": questions are designed so that having unlimited web access barely helps — non-experts with full internet access score only ~34%, while human PhD experts score ~65–74%. The design principle is explicit: if you can Google your way to the answer, the benchmark is measuring search skill, not genuine understanding. Humanity's Last Exam (Phan et al., 2025), 2,500 questions from ~1,000 domain experts across disciplines, launched January 2025, represents the current ceiling of published benchmark difficulty. At launch, no model was expected to exceed ~10%; frontier models now reach ~30–55%. Alongside GPQA, AIME (competition-level math with integer answers) and MATH-500 (Hendrycks et al., 2021b), a curated set of competition problems, become the math standards.</p>
+<p>Second, static single-turn benchmarks give way to multi-step task completion. SWE-bench Verified (OpenAI, 2024), a dataset of 500 real GitHub issues where models must generate code patches that pass existing unit tests using only a bash terminal and text editor, becomes the definitive signal for agentic capability. This is qualitatively different from anything that came before. The model must understand a real codebase, localize where a change is needed, write working code, and not break anything else. It's the first benchmark that measures whether a model can do actual engineering work, not just answer questions about it. Scores went from ~2% in early 2024 to ~94% for Claude Mythos Preview — Anthropic's most capable model to date, released April 7, 2026, restricted to a narrow set of cybersecurity partners under Project Glasswing — a 47× improvement in two years.</p>
+<p><img src="images/fig2-benchmark-timeline.png" alt="LLM benchmark landscape — publication date on the x-axis, current best score on the y-axis, each benchmark labeled and colored by task type." />
+<em>Figure 2. The benchmark landscape as of Apr 2026 — each point is a benchmark colored by task type (reasoning, math, coding, agentic). As scores approach 100%, new harder benchmarks appear lower on the y-axis. Source: <a href="https://artificialanalysis.ai/">Artificial Analysis</a>.</em></p>
+<p>Benchmarks are getting harder and closer to real production tasks — that's genuine progress. But SOTA models also advance faster than the field can introduce new benchmarks, and saturation often follows within a year or two of adoption.</p>
+<p>One more thing worth noting before moving on: benchmark scores don't map 1:1 to how a model feels to use. Part of this gap is structural. As benchmarks become widely known, there's a real risk of <em>contamination</em> — evaluation problems appearing, directly or in paraphrased form, in a model's training data. A high score on a saturated benchmark where contamination is hard to rule out tells you less than a high score on a freshly introduced one.</p>
+<hr />
+<h2>Part 2 — Reading Model Cards</h2>
+<p>When a frontier lab launches a new model, the benchmark scores don't appear in isolation — they're published as part of a <em>model card</em>, a structured transparency document that accompanies the release.</p>
+<p>A model card is designed to answer four questions in sequence:</p>
+<ol>
+<li><strong>What is this model and how was it built?</strong> Training data sources, architecture details, novel training techniques.</li>
+<li><strong>What can it actually do?</strong> Benchmark scores across coding, math, reasoning, and other tasks — typically compared against prior models and competitors.</li>
+<li><strong>How safe and aligned is it?</strong> Often the longest section — how the model responds to dangerous requests, its performance on tests for catastrophic risks like bioweapon assistance or cyberattacks, and what alignment techniques were applied.</li>
+<li><strong>What did we decide to do as a result?</strong> Whether the model is released publicly, restricted to vetted partners, or held back — and what safeguards apply.</li>
+</ol>
+<p>Unlike a product announcement, a model card is designed to show the work, including the parts that didn't go well. The benchmark scores we care about are the answer to question 2.</p>
+<p><img src="images/fig3-model-card-example.png" alt="Gemini 3.1 Pro model card benchmark table comparing six frontier models across 18 benchmarks spanning reasoning, coding, agentic, and multilingual tasks." />
+<em>Figure 3. Benchmark comparison table from the Gemini 3.1 Pro model card (Feb 2026). Bold values indicate the highest score per row. Source: <a href="https://deepmind.google/models/model-cards/gemini-3-1-pro/">Google DeepMind</a>.</em></p>
+<p>The most common benchmarks from top-tier model cards, categorized by capability domain:</p>
+<p><strong>Reasoning &amp; math</strong> — from competition math to PhD-level science</p>
+<table>
+<thead><tr><th>Benchmark</th><th>What it tests</th><th>Published</th></tr></thead>
+<tbody>
+<tr><td>GPQA Diamond</td><td>PhD-level questions in biology, chemistry, and physics</td><td>Nov 2023</td></tr>
+<tr><td>ARC-AGI-2</td><td>Novel visual pattern puzzles designed to test general reasoning, not memorization</td><td>Mar 2025</td></tr>
+<tr><td>Humanity's Last Exam</td><td>Extremely hard academic questions across many disciplines</td><td>Jan 2025</td></tr>
+</tbody>
+</table>
+<p><strong>Coding &amp; software engineering</strong> — can the model write, debug, and fix real-world code?</p>
+<table>
+<thead><tr><th>Benchmark</th><th>What it tests</th><th>Published</th></tr></thead>
+<tbody>
+<tr><td>SWE-bench Verified</td><td>500 human-verified GitHub issues; tests whether agents can produce patches that pass the full test suite</td><td>Aug 2024</td></tr>
+<tr><td>SWE-bench Pro</td><td>1,865 harder tasks from 41 actively-maintained repos requiring multi-file, long-horizon patches</td><td>Sep 2025</td></tr>
+<tr><td>Terminal-Bench 2.0</td><td>Real terminal-based coding, system administration, and data-processing workflows in a live shell</td><td>Nov 2025</td></tr>
+</tbody>
+</table>
+<p><strong>Agentic &amp; computer use</strong> — long-horizon task completion across tools, browsers, and operating systems</p>
+<table>
+<thead><tr><th>Benchmark</th><th>What it tests</th><th>Published</th></tr></thead>
+<tbody>
+<tr><td>BrowseComp</td><td>Hard web-research problems requiring persistent, multi-site browsing to locate deeply entangled facts</td><td>Apr 2025</td></tr>
+<tr><td>MCP Atlas</td><td>Multi-step tool chaining and planning using real MCP (Model Context Protocol) servers</td><td>Jan 2026</td></tr>
+<tr><td>OSWorld-Verified</td><td>Multimodal agents completing real desktop GUI tasks spanning multiple applications on a live Ubuntu VM</td><td>Jul 2025</td></tr>
+<tr><td>τ²-bench</td><td>Dual-control interactions where both user and agent coordinate actions across telecom and retail support scenarios</td><td>Jun 2025</td></tr>
+</tbody>
+</table>
+<p><strong>Knowledge &amp; multilingual</strong> — breadth of factual knowledge across languages and professional domains</p>
+<table>
+<thead><tr><th>Benchmark</th><th>What it tests</th><th>Published</th></tr></thead>
+<tbody>
+<tr><td>MMMLU</td><td>MMLU's 14,079 questions translated into 14 non-English languages; measures multilingual breadth across 57 subjects</td><td>Sep 2024</td></tr>
+<tr><td>GDPval</td><td>Economically valuable knowledge work simulating 44 professional occupations across 9 industries</td><td>Oct 2025</td></tr>
+<tr><td>MMMU-Pro</td><td>Reasoning-intensive multimodal questions across 30 disciplines, designed to reduce pattern exploitation and contamination</td><td>Sep 2024</td></tr>
+</tbody>
+</table>
+<p><strong>Long-context &amp; retrieval</strong> — sustained coherence and precision across very long contexts</p>
+<table>
+<thead><tr><th>Benchmark</th><th>What it tests</th><th>Published</th></tr></thead>
+<tbody>
+<tr><td>GraphWalks</td><td>Graph traversal over synthetic directed graphs encoded as hex hashes; tests structural long-context reasoning at 128k+ tokens</td><td>Apr 2025</td></tr>
+<tr><td>MRCR v2</td><td>Multi-round co-reference resolution across long synthetic dialogues; tests precise recall at up to 1M tokens</td><td>Apr 2025</td></tr>
+</tbody>
+</table>
+<p>One category worth naming separately is safety and risk. These benchmarks don't measure what the model can helpfully accomplish — they probe whether it can be weaponized, manipulated into causing harm, or made to take hidden actions that undermine oversight. As frontier models become more capable, this section of the model card grows proportionally in importance. Labs also typically run additional private evaluations that never appear in the published card, partly to avoid contamination and partly because some risk assessments are too sensitive to disclose. What you see publicly is the floor of the evaluation work done, not the ceiling.</p>
+<hr />
+<h2>Part 3 — How to Correctly Read Public Leaderboards</h2>
+<p>The reason standardized leaderboards exist is that self-reported benchmark scores from model cards are almost never directly comparable, even when they use the same benchmark name.</p>
+<p><strong>The reporting-conditions problem</strong></p>
+<p>A benchmark score is not a property of a model — it's the output of a pipeline: model + evaluation harness + tool configuration + sampling budget. Any of these can vary without disclosure. The most consequential dimensions:</p>
+<table>
+<thead><tr><th>Dimension</th><th>Impact</th></tr></thead>
+<tbody>
+<tr><td>Sampling strategy (avg@k)</td><td>Running the same prompt k times and averaging scores. AIME and GPQA can differ 10–15 pp between k=1 and k=32 at the frontier</td></tr>
+<tr><td>Test-time parallelism (best-of-k)</td><td>Running k distinct agent trajectories in parallel and selecting the highest-scoring one via a scoring model. Distinct from averaging — this is optimization over diverse attempts</td></tr>
+<tr><td>Tool access</td><td>AIME with a Python interpreter vs. without can differ 10–20 pp</td></tr>
+<tr><td>Scaffolding</td><td>The agent framework wrapping the model matters — whether it uses a simple bash loop, a custom retry-on-failure harness, or a multi-agent orchestrator. SWE-bench scores vary substantially across these choices</td></tr>
+</tbody>
+</table>
+<p>SWE-bench Verified is the clearest example of why this matters. A model evaluated with best-of-k parallel compute — sampling multiple agent trajectories and selecting the best via a scoring model — will report a materially higher number than the same model evaluated single-attempt. Both call it "SWE-bench Verified." The underlying model may be identical. The difference is compute budget, not capability.</p>
+<p>Public leaderboards with standardized evaluation conditions exist precisely because model cards don't standardize these choices.</p>
+<p><strong>LMArena (formerly Chatbot Arena)</strong></p>
+<p><img src="images/fig4-lmarena-leaderboard.png" alt="LMArena text arena leaderboard showing the top 12 frontier models ranked by Bradley-Terry Elo score as of April 12, 2026." />
+<em>Figure 4. LMArena text arena leaderboard — top 12 models as of Apr 12, 2026. Rank spreads reflect the 95% confidence interval; models within a few points of each other are statistically tied. Source: <a href="https://arena.ai/leaderboard/text">arena.ai</a>.</em></p>
+<p>LMArena is a crowdsourced pairwise preference platform. Users submit prompts, vote between two anonymous models, and rankings update continuously. Unlike static benchmark datasets that can appear in training data, LMArena uses real user prompts in real time — making it harder for labs to directly optimize for specific evaluation inputs, which is part of what gives it credibility.</p>
+<p>The ranking methodology deserves a brief explanation. The original Chatbot Arena used the standard Elo rating system borrowed from chess, where each player's score updates after every individual match. The problem in the LLM setting: with thousands of simultaneous battles across many different model pairs, processing battles one by one introduces score instability — the final ratings depend on the arbitrary order in which results happen to be recorded. The original Arena mitigated this with bootstrap resampling (repeatedly sampling from the battle history to estimate a stable mean Elo), but it remained a structural limitation. The later adoption of the Bradley-Terry model (Bradley &amp; Terry, 1952) addressed this more cleanly: rather than updating scores battle-by-battle, it estimates each model's underlying strength as a latent parameter. The resulting estimates are then rescaled to match the familiar Elo range (baseline = 1000), which is why you still see Elo-like numbers on the leaderboard even though the underlying math is Bradley-Terry. LMArena became an independent company in early 2025.</p>
+<p>LMArena captures human preference on open-ended conversational tasks from a broad, self-selected user population — the most-cited leaderboard in industry because it uses real users on real prompts. But it has real limitations. LMArena's own style-control analysis found that controlling for response length and formatting shifted rankings substantially — verbose-but-flashy models fell while concise-but-accurate ones rose. LMArena now enables style control by default, adjusting rankings to account for response length and formatting. And "The Leaderboard Illusion" (Singh et al., 2025) documented another distortion: providers privately test many model variants before release and publish only the best-performing result, which means the reported score reflects selective disclosure rather than a representative evaluation — Meta, for instance, tested 27 private Llama-4 variants before settling on the one it disclosed.</p>
+<p>Arena Elo is a reasonable reference for general conversational quality as perceived by a broad population — but treat it as one signal among several rather than a definitive ranking.</p>
+<p><strong>Artificial Analysis</strong></p>
+<p><img src="images/fig5-aa-intelligence-vs-cost.png" alt="Artificial Analysis Intelligence Index vs. price scatter — open-weight models dominate the low-cost frontier while proprietary models push the quality ceiling at higher prices." />
+<em>Figure 5. Intelligence vs. price across frontier and open-weight models. The green quadrant marks the most attractive cost-efficiency zone. Source: <a href="https://artificialanalysis.ai/">Artificial Analysis</a>.</em></p>
+<p>Artificial Analysis provides automated, continuous benchmarking of LLM APIs from the customer's perspective. It combines quality — through the AA Intelligence Index, a composite of GPQA Diamond, HLE, MMLU-Pro, and a few other representative benchmarks — with serving system metrics like latency, throughput, and price per token. It's one of the few public platforms integrating both model intelligence and inference system performance in a single dashboard, which makes it distinctly useful for practitioners trying to answer "which provider gives me the best latency/price/intelligence tradeoff."</p>
+<p>The quality-cost picture that emerges is consistently clear: open-weight models (GPT-OSS 120B, DeepSeek V3.2, Kimi K2.5, Qwen3.5, GLM-5.1) dominate the low- and mid-cost portion of the intelligence frontier, offering substantially better cost efficiency than their proprietary counterparts at comparable intelligence levels. Proprietary models (Gemini 3.1 Pro, Claude 4.6, GPT-5.x) push the absolute intelligence ceiling — but at a premium. The AA Intelligence Index is independently run, so labs cannot self-report their scores.</p>
+<p><strong>Open-source benchmark tools</strong></p>
+<p>When you need to evaluate an open-weight model yourself — particularly a quantized or otherwise optimized version — the standard tool is <strong>lm-evaluation-harness</strong> (Sutawika et al., 2026). It supports MMLU, GPQA, and dozens of other benchmarks with standardized prompting and scoring, and is the right tool for establishing quality gates when optimizing a model for deployment.</p>
+<hr />
+<h2>Summary</h2>
+<p>Benchmarks evolve to stay ahead of the models they measure — what looked like a hard ceiling becomes a floor within a generation, and the field reaches for something harder. Model cards formalize this into a structured transparency artifact, but the scores they report reflect a specific evaluation pipeline, not a stable property of the model. Public leaderboards standardize those conditions, but each captures a different slice: LMArena measures conversational preference across a broad user population, and Artificial Analysis measures intelligence against cost and speed. None of them tells you how a model will perform on your specific workload. That's a question only your own evaluation setup can answer.</p>
+<h2>What's Next</h2>
+<p>Capability without delivery is just potential. The inference system underneath the model — the serving infrastructure, the latency, the throughput, the cost — determines whether any of this actually reaches users at scale. Once you know what a model <em>can</em> do, how do you evaluate whether a system can <em>deliver</em> it fast enough, reliably enough, and cheaply enough to matter in production? The next post answers exactly that: how to evaluate an LLM inference system.</p>
+<hr />
+<h2>References</h2>
+<ol>
+<li>Anthropic. (2026). <em>Claude Mythos Preview system card</em>. <a href="https://www-cdn.anthropic.com/08ab9158070959f88f296514c21b7facce6f52bc.pdf">anthropic.com</a></li>
+<li>ARC Prize Foundation. (2025). <em>ARC-AGI-2</em>. <a href="https://arcprize.org/arc-agi-2">arcprize.org/arc-agi-2</a></li>
+<li>Bandi, C., et al. (2026). MCP-Atlas: A large-scale benchmark for tool-use competency with real MCP servers. <em>arXiv</em>. <a href="https://arxiv.org/abs/2602.00933">arxiv.org/abs/2602.00933</a></li>
+<li>Barres, V., et al. (2025). τ²-bench: Evaluating conversational agents in a dual-control environment. <em>arXiv</em>. <a href="https://arxiv.org/abs/2506.07982">arxiv.org/abs/2506.07982</a></li>
+<li>Bradley, R. A., &amp; Terry, M. E. (1952). Rank analysis of incomplete block designs: I. The method of paired comparisons. <em>Biometrika</em>, <em>39</em>(3/4), 324–345.</li>
+<li>Chen, M., et al. (2021). Evaluating large language models trained on code. <em>arXiv</em>. <a href="https://arxiv.org/abs/2107.03374">arxiv.org/abs/2107.03374</a></li>
+<li>Clark, P., et al. (2018). Think you have solved question answering? Try ARC, the AI2 reasoning challenge. <em>arXiv</em>. <a href="https://arxiv.org/abs/1803.05457">arxiv.org/abs/1803.05457</a></li>
+<li>Cobbe, K., et al. (2021). Training verifiers to solve math word problems. <em>arXiv</em>. <a href="https://arxiv.org/abs/2110.14168">arxiv.org/abs/2110.14168</a></li>
+<li>Deng, X., et al. (2025). SWE-bench Pro: Can AI agents solve long-horizon software engineering tasks? <em>arXiv</em>. <a href="https://arxiv.org/abs/2509.16941">arxiv.org/abs/2509.16941</a></li>
+<li>Google DeepMind. (2026). <em>Gemini 3.1 Pro model card</em>. <a href="https://deepmind.google/models/model-cards/gemini-3-1-pro/">deepmind.google</a></li>
+<li>Hendrycks, D., et al. (2021a). Measuring massive multitask language understanding. <em>arXiv</em>. <a href="https://arxiv.org/abs/2009.03300">arxiv.org/abs/2009.03300</a></li>
+<li>Hendrycks, D., et al. (2021b). Measuring mathematical problem solving with the MATH dataset. <em>arXiv</em>. <a href="https://arxiv.org/abs/2103.03874">arxiv.org/abs/2103.03874</a></li>
+<li>Jimenez, C. E., et al. (2024). SWE-bench: Can language models resolve real-world GitHub issues? <em>arXiv</em>. <a href="https://arxiv.org/abs/2310.06770">arxiv.org/abs/2310.06770</a></li>
+<li>Merrill, M. A., et al. (2026). Terminal-Bench: Benchmarking agents on hard, realistic tasks in command line interfaces. <em>arXiv</em>. <a href="https://arxiv.org/abs/2601.11868">arxiv.org/abs/2601.11868</a></li>
+<li>OpenAI. (2023). <em>MMMLU: Multilingual MMLU dataset</em>. Hugging Face. <a href="https://huggingface.co/datasets/openai/MMMLU">huggingface.co</a></li>
+<li>OpenAI. (2024). <em>Introducing SWE-bench Verified</em>. <a href="https://openai.com/index/introducing-swe-bench-verified/">openai.com</a></li>
+<li>OpenAI. (2025b). <em>MRCR: Multi-round co-reference resolution dataset</em>. Hugging Face. <a href="https://huggingface.co/datasets/openai/mrcr">huggingface.co</a></li>
+<li>Patwardhan, T., et al. (2025). GDPval: Evaluating AI model performance on real-world economically valuable tasks. <em>arXiv</em>. <a href="https://arxiv.org/abs/2510.04374">arxiv.org/abs/2510.04374</a></li>
+<li>Phan, L., et al. (2025). Humanity's last exam. <em>arXiv</em>. <a href="https://arxiv.org/abs/2501.14249">arxiv.org/abs/2501.14249</a></li>
+<li>Rein, D., et al. (2023). GPQA: A graduate-level Google-proof Q&amp;A benchmark. <em>arXiv</em>. <a href="https://arxiv.org/abs/2311.12022">arxiv.org/abs/2311.12022</a></li>
+<li>Singh, S., et al. (2025). The leaderboard illusion. <em>arXiv</em>. <a href="https://arxiv.org/abs/2504.20879">arxiv.org/abs/2504.20879</a></li>
+<li>Sutawika, L., et al. (2026). Language model evaluation harness. <em>Zenodo</em>. <a href="https://zenodo.org/records/18636344">zenodo.org/records/18636344</a></li>
+<li>Wang, Y., et al. (2024). MMLU-Pro: A more robust and challenging multi-task language understanding benchmark. <em>arXiv</em>. <a href="https://arxiv.org/abs/2406.01574">arxiv.org/abs/2406.01574</a></li>
+<li>Wei, J., et al. (2022). Chain-of-thought prompting elicits reasoning in large language models. <em>arXiv</em>. <a href="https://arxiv.org/abs/2201.11903">arxiv.org/abs/2201.11903</a></li>
+<li>Wei, J., et al. (2025). BrowseComp: A simple yet challenging benchmark for browsing agents. <em>arXiv</em>. <a href="https://arxiv.org/abs/2504.12516">arxiv.org/abs/2504.12516</a></li>
+<li>Xie, T., et al. (2024). OSWorld: Benchmarking multimodal agents for open-ended tasks in real computer environments. <em>arXiv</em>. <a href="https://arxiv.org/abs/2404.07972">arxiv.org/abs/2404.07972</a></li>
+<li>Yue, X., et al. (2024). MMMU-Pro: A more robust multi-discipline multimodal understanding benchmark. <em>arXiv</em>. <a href="https://arxiv.org/abs/2409.02813">arxiv.org/abs/2409.02813</a></li>
+</ol>
+<div style="margin-top:64px;padding-top:32px;border-top:1px solid var(--border)">
+  <script src="https://giscus.app/client.js"
+          data-repo="chongming-ni/infero"
+          data-repo-id="R_kgDORqFNAA"
+          data-category="General"
+          data-category-id="DIC_kwDORqFNAM4C5G1K"
+          data-mapping="url"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+<script data-goatcounter="https://infero.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+const b=document.getElementById("t"),h=document.documentElement;
+if(localStorage.getItem("theme")==="light"){h.classList.add("light");b.textContent="dark";}
+b.onclick=()=>{const l=h.classList.toggle("light");b.textContent=l?"dark":"light";localStorage.setItem("theme",l?"light":"dark");};
+</script>
+</body></html>

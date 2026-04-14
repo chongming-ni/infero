@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1200 637" role="img">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Inferō: The Decode — Scorecards: Evaluating LLM Capability</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">LinkedIn preview image with favicon and blog series name on left, post title on right</desc>
+
+  <defs>
+    <!-- Green glow on left -->
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 140) scale(280)">
+      <stop offset="0%" stop-color="#008a44" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#008a44" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Dot pattern for right panel -->
+    <pattern id="dots" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#008a44" fill-opacity="0.07"/>
+    </pattern>
+    <!-- Favicon clip -->
+    <clipPath id="fav-clip">
+      <rect x="58" y="148" width="96" height="96" rx="19"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="627" fill="#0d1117" style="fill:rgb(13, 17, 23);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- LEFT panel (38.2% = 458px) -->
+  <rect x="0" y="0" width="458" height="627" fill="#0d1117" style="fill:rgb(13, 17, 23);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <!-- Glow -->
+  <rect x="0" y="0" width="458" height="627" fill="url(#glow)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <!-- Divider -->
+  <line x1="458" y1="0" x2="458" y2="627" stroke="rgba(255,255,255,0.06)" stroke-width="1" style="fill:rgb(0, 0, 0);stroke:rgba(255, 255, 255, 0.06);color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Favicon (96×96 at x=58, vertically centered group starts at y=148) -->
+  <rect x="58" y="148" width="96" height="96" rx="19" fill="#1a1a1a" style="fill:rgb(26, 26, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="106" y="210" font-family="'JetBrains Mono', monospace" font-size="51" font-weight="700" text-anchor="middle" dominant-baseline="central" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;, monospace;font-size:51px;font-weight:700;text-anchor:middle;dominant-baseline:central">
+    <tspan fill="#ffffff" style="fill:rgb(255, 255, 255);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;, monospace;font-size:51px;font-weight:700;text-anchor:middle;dominant-baseline:central">i</tspan><tspan fill="#008a44" style="fill:rgb(0, 138, 68);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;JetBrains Mono&quot;, monospace;font-size:51px;font-weight:700;text-anchor:middle;dominant-baseline:central">ō</tspan>
+  </text>
+
+  <!-- "Inferō" -->
+  <text x="58" y="296" font-family="system-ui, sans-serif" font-size="52" font-weight="500" fill="#f1f5f9" dominant-baseline="hanging" letter-spacing="-1" style="fill:rgb(241, 245, 249);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:52px;font-weight:500;text-anchor:start;dominant-baseline:hanging">Infer<tspan fill="#008a44" style="fill:rgb(0, 138, 68);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:52px;font-weight:500;text-anchor:start;dominant-baseline:hanging">ō</tspan></text>
+
+  <!-- Tagline -->
+  <text x="58" y="364" font-family="system-ui, sans-serif" font-size="17" fill="#4b5563" dominant-baseline="hanging" letter-spacing="0.4" style="fill:rgb(75, 85, 99);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:17px;font-weight:400;text-anchor:start;dominant-baseline:hanging">A LLM Inference Blog Series</text>
+
+  <!-- RIGHT panel (61.8% = 742px, starts at x=458) -->
+  <rect x="458" y="0" width="742" height="627" fill="#0d1117" style="fill:rgb(13, 17, 23);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <rect x="458" y="0" width="742" height="627" fill="url(#dots)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Post pill -->
+  <rect x="520" y="54" width="88" height="26" rx="13" fill="none" stroke="#008a44" stroke-width="0.8" stroke-opacity="0.5" style="fill:none;stroke:rgb(0, 138, 68);color:rgb(0, 0, 0);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="564" y="67" font-family="system-ui, sans-serif" font-size="13" fill="#008a44" text-anchor="middle" dominant-baseline="central" letter-spacing="1.5" style="fill:rgb(0, 138, 68);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:13px;font-weight:400;text-anchor:middle;dominant-baseline:central">POST 1.2</text>
+
+  <!-- Date -->
+  <text x="622" y="67" font-family="system-ui, sans-serif" font-size="13" fill="#374151" dominant-baseline="central" letter-spacing="0.5" style="fill:rgb(55, 65, 81);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:13px;font-weight:400;text-anchor:start;dominant-baseline:central">Apr 12, 2026</text>
+
+  <!-- Green accent bar above title -->
+  <rect x="520" y="190" width="40" height="3" rx="1.5" fill="#008a44" fill-opacity="0.75" style="fill:rgb(0, 138, 68);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Post title -->
+  <text font-family="system-ui, sans-serif" font-size="62" font-weight="500" fill="#f1f5f9" letter-spacing="-1.5" style="fill:rgb(241, 245, 249);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:62px;font-weight:500;text-anchor:start;dominant-baseline:auto">
+    <tspan x="520" y="280" style="fill:rgb(241, 245, 249);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:62px;font-weight:500;text-anchor:start;dominant-baseline:auto">Scorecards:</tspan>
+    <tspan x="520" dy="78" style="fill:rgb(241, 245, 249);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:62px;font-weight:500;text-anchor:start;dominant-baseline:auto">Evaluating</tspan>
+    <tspan x="520" dy="78" style="fill:rgb(241, 245, 249);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:62px;font-weight:500;text-anchor:start;dominant-baseline:auto">LLM Capability</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text font-family="system-ui, sans-serif" font-size="21" fill="#4b5563" letter-spacing="0.2" style="fill:rgb(75, 85, 99);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:21px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <tspan x="520" y="530" style="fill:rgb(75, 85, 99);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:21px;font-weight:400;text-anchor:start;dominant-baseline:auto">How the benchmark ecosystem evolved — and why</tspan>
+    <tspan x="520" dy="30" style="fill:rgb(75, 85, 99);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:21px;font-weight:400;text-anchor:start;dominant-baseline:auto">it's in a permanent arms race.</tspan>
+  </text>
+
+  <!-- Author avatar circle -->
+  <circle cx="533" cy="590" r="14" fill="#008a44" fill-opacity="0.12" stroke="#008a44" stroke-width="0.8" stroke-opacity="0.4" style="fill:rgb(0, 138, 68);stroke:rgb(0, 138, 68);color:rgb(0, 0, 0);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="533" y="590" font-family="system-ui, sans-serif" font-size="11" fill="#4ade80" font-weight="500" text-anchor="middle" dominant-baseline="central" style="fill:rgb(74, 222, 128);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:11px;font-weight:500;text-anchor:middle;dominant-baseline:central">CN</text>
+
+  <!-- Author name -->
+  <text x="554" y="590" font-family="system-ui, sans-serif" font-size="15" fill="#4b5563" dominant-baseline="central" letter-spacing="0.3" style="fill:rgb(75, 85, 99);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:15px;font-weight:400;text-anchor:start;dominant-baseline:central">Chongming Ni</text>
+</svg>
